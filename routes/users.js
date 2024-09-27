@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./index.js/db'); // Importar la conexión a la base de datos
+const db = require('./index'); // Importar la conexión a la base de datos
 
 // Obtener todos los usuarios
 router.get('/', (req, res) => {
