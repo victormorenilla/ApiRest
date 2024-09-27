@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../index/db'); // Importar la conexión a la base de datos
+const connectionUrl = 'mysql://root:pjIJeIqjdTkiOTPhdeLJMdzdLTTfOctD@junction.proxy.rlwy.net:50532/railway';
+const db = mysql.createConnection(connectionUrl);
 
 // Obtener todos los usuarios
 router.get('/', (req, res) => {
