@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('API REST funcionando correctamente');
 });
 
-/* Ruta para obtener todos los usuarios de la tabla "usuarios"
+// Ruta para obtener todos los usuarios de la tabla "usuarios"
 app.get('/users', (req, res) => {
   db.query('SELECT * FROM users', (err, results) => {
     if (err) {
@@ -34,7 +34,7 @@ app.get('/users', (req, res) => {
       res.json(results);
     }
   });
-});*/
+});
 
 // Iniciar el servidor
 app.listen(port, () => {
