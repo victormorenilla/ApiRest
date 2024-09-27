@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('API REST funcionando correctamente');
 });
 // Importar las rutas
-const userRoutes = require('./routes/users');
+const userRoutes = require('/routes/users');
 
 // Usar las rutas
 app.use('/api/users', userRoutes);
