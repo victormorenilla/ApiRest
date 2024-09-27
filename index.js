@@ -23,18 +23,11 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('API REST funcionando correctamente');
 });
+// Importar las rutas
+const userRoutes = require('./routes/users');
 
-// Ruta para obtener todos los usuarios de la tabla "usuarios"
-app.get('/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error al obtener los datos' });
-    } else {
-      res.json(results);
-    }
-  });
-});
+// Usar las rutas
+app.use('/api/users', userRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {
