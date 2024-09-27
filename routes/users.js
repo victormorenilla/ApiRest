@@ -15,9 +15,9 @@ router.get('/', (req, res) => {
 });
 
 // Obtener un usuario por ID
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  db.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
+router.get('/:name', (req, res) => {
+  const { name } = req.params;
+  db.query('SELECT * FROM users WHERE name = ?', [name], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar usuario' });
     }
@@ -31,12 +31,12 @@ router.get('/:id', (req, res) => {
 
 // Crear un nuevo usuario
 router.post('/', (req, res) => {
-  const { name, email } = req.body;
-  db.query('INSERT INTO users (name, email) VALUES (?, ?)', [name, email], (err, results) => {
+  const { name, email,password } = req.body;
+  db.query('INSERT INTO users (name, email,password) VALUES (?, ?,?)', [name, email,password], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al crear usuario' });
     }
-    res.status(201).json({ id: results.insertId, name, email });
+    res.status(201).json({ id: results.insertId, name, email,password });
   });
 });
 
