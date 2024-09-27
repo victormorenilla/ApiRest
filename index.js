@@ -2,7 +2,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 // Configuración de la conexión a la base de datos MySQL
 const connectionUrl = 'mysql://root:pjIJeIqjdTkiOTPhdeLJMdzdLTTfOctD@junction.proxy.rlwy.net:50532/railway';
