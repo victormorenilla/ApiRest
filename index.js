@@ -19,12 +19,12 @@ db.connect((err) => {
 // Middleware para manejar datos en formato JSON
 app.use(express.json());
 
-// Ruta de prueba
+/*// Ruta de prueba
 app.get('/', (req, res) => {
   res.send('API REST funcionando correctamente');
-});
+});*/
 // Importar las rutas
-const userRoutes = require('/routes/users.js');
+const userRoutes = require('/routes/users');
 
 // Usar las rutas
 app.use('/api/users', userRoutes);
