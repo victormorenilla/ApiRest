@@ -30,7 +30,7 @@ router.get('/:name', (req, res) => {
 });
 
 // Crear un nuevo usuario
-router.post('/', (req, res) => {
+router.post('/p', (req, res) => {
   const { name, email, password } = req.body;
   db.query('INSERT INTO users (name, email,password) VALUES (?, ?, ?)', [name, email, password], (err, results) => {
     if (err) {
