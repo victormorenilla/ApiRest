@@ -61,16 +61,30 @@ router.post('/', (req, res) => {
 router.put('/name/:name', (req, res) => {
   const { name } = req.params;
   const { email, password } = req.body;
-  db.query('UPDATE users SET name = ?, email = ?, password = ? WHERE name = ?', [ email, password, name], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al actualizar usuario' });
+ // Verificar que todos los campos estén presentes
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Faltan datos para actualizar el usuario' });
+  }
+
+  // Ejecutar la consulta
+  db.query(
+    'UPDATE users SET email = ?, password = ? WHERE name = ?',
+    [email, password, name],
+    (err, results) => {
+      if (err) {
+        console.error('Error en la consulta:', err); // Log detallado del error en la consola
+        return res.status(500).json({ message: 'Error al modificar usuario' });
+      }
+
+      // Verificar si algún usuario fue afectado
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      // Responder con éxito
+      res.status(200).json({ message: 'Usuario modificado correctamente' });
     }
-    if (results.affectedRows > 0) {
-      res.json({ name, email, password});
-    } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-  });
+  );
 });
 
 // Eliminar un usuario
