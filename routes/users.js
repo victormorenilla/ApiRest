@@ -30,13 +30,13 @@ router.get('/:name', (req, res) => {
 });
 
 // Crear un nuevo usuario
-router.post('/p', (req, res) => {
+router.post('/', (req, res) => {
   const { name, email, password } = req.body;
   db.query('INSERT INTO users (name, email,password) VALUES (?, ?, ?)', [name, email, password], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al crear usuario' });
     }
-    res.status(201).json({ id: results.insertId, name, email,password });
+    res.status(201).json({ id: results.insertId, name, email, password });
   });
 });
 
