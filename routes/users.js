@@ -32,11 +32,28 @@ router.get('/:name', (req, res) => {
 // Crear un nuevo usuario
 router.post('/', (req, res) => {
   const { name, email, password } = req.body;
-  db.query('INSERT INTO users (name, email,password) VALUES (?, ?, ?)', [name, email, password], (err, results) => {
+
+  // Validación básica de los campos
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos.' });
+  }
+
+  // Consulta para insertar un nuevo usuario
+  const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+
+  db.query(query, [name, email, password], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Error al crear usuario' });
+      console.error('Error al crear usuario:', err);
+      return res.status(500).json({ message: 'Error al crear usuario', error: err });
     }
-    res.status(201).json({ id: results.insertId, name, email, password });
+
+    // Si se inserta correctamente, devolver la información del usuario creado
+    res.status(201).json({
+      id: results.insertId,
+      name,
+      email,
+      password
+    });
   });
 });
 
