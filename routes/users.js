@@ -60,7 +60,7 @@ router.post('/', (req, res) => {
 // Actualizar un usuario existente
 router.put('/name/:name', (req, res) => {
   const { name } = req.params;
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   db.query('UPDATE users SET name = ?, email = ?, password = ? WHERE name = ?', [name, email, password], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al actualizar usuario' });
