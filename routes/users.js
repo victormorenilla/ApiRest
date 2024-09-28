@@ -88,7 +88,7 @@ router.put('/name/:name', (req, res) => {
 });
 
 // Eliminar un usuario
-router.delete('/:name', (req, res) => {
+router.delete('/name/:name', (req, res) => {
   const { name } = req.params;
   db.query('DELETE FROM users WHERE name = ?', [name], (err, results) => {
     if (err) {
