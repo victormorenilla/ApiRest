@@ -16,8 +16,8 @@ router.get('/', (req, res) => {
 
 // Obtener un terminal por modelo
 router.get('/:Modelo', (req, res) => {
-  const { modelo } = req.params;
-  db.query('SELECT * FROM Terminales WHERE Modelo = ?', [modelo], (err, results) => {
+  const { Modelo } = req.params;
+  db.query('SELECT * FROM Terminales WHERE Modelo = ?', [Modelo], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar terminal' });
     }
