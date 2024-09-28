@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 });
 
 // Obtener un usuario por ID
-router.get('/:name', (req, res) => {
+router.get('/name/:name', (req, res) => {
   const { name } = req.params;
   db.query('SELECT * FROM users WHERE name = ?', [name], (err, results) => {
     if (err) {
