@@ -72,7 +72,7 @@ router.put('/Modelo/:Modelo', (req, res) => {
   // Ejecutar la consulta
   db.query(
     'UPDATE Terminales SET Marca= ?, Procesador= ?, Imagen= ?, Precio= ?, descripcion= ? WHERE Modelo = ?',
-    [Marca, Procesador, Imagen, Precio, descripcion],
+    [Marca, Procesador, Imagen, Precio, descripcion, modelo],
     (err, results) => {
       if (err) {
         console.error('Error en la consulta:', err); // Log detallado del error en la consola
