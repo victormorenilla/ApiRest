@@ -1,0 +1,115 @@
+const express = require('express');
+const router = express.Router();
+const mysql = require('mysql2');
+const connectionUrl = 'mysql://root:pjIJeIqjdTkiOTPhdeLJMdzdLTTfOctD@junction.proxy.rlwy.net:50532/railway';
+const db = mysql.createConnection(connectionUrl);
+
+// Obtener todos los terminales
+router.get('/', (req, res) => {
+  db.query('SELECT * FROM Terminales', (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error al consultar usuarios' });
+    }
+    res.json(results);
+  });
+});
+
+// Obtener un terminal por modelo
+router.get('/:Modelo', (req, res) => {
+  const { modelo } = req.params;
+  db.query('SELECT * FROM Terminales WHERE Modelo = ?', [modelo], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error al consultar terminal' });
+    }
+    if (results.length > 0) {
+      res.json(results[0]);
+    } else {
+      res.status(404).json({ message: 'Modelo no encontrado' });
+    }
+  });
+});
+
+// Crear un nuevo terminal
+router.post('/', (req, res) => {
+  const { Marca, Modelo, Procesador, Imagen, Precio, descripcion } = req.body;
+
+  // Validación básica de los campos
+  if (!Marca || !Modelo || !Procesador) {
+    return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos.' });
+  }
+
+  // Consulta para insertar un nuevo usuario
+  const query = 'INSERT INTO Terminales (Marca, Modelo, Procesador, Imagen, Precio, descripcion) VALUES (?, ?, ?, ?, ?, ?)';
+
+  db.query(query, [Marca, Modelo, Procesador, Imagen, Precio, descripcion], (err, results) => {
+    if (err) {
+      console.error('Error al crear terminal:', err);
+      return res.status(500).json({ message: 'Error al crear terminal', error: err });
+    }
+
+    // Si se inserta correctamente, devolver la información del usuario creado
+    res.status(201).json({
+      id: results.insertId,
+     Marca, 
+     Modelo, 
+     Procesador, 
+     Imagen, 
+     Precio, 
+     descripcion
+    });
+  });
+});
+
+// Actualizar un terminal existente
+router.put('/Modelo/:Modelo', (req, res) => {
+  const { modelo } = req.params;
+  const { Marca, Procesador, Imagen, Precio, descripcion} = req.body;
+ // Verificar que todos los campos estén presentes
+  if (!Marca || !Procesador) {
+    return res.status(400).json({ message: 'Faltan datos para actualizar el terminal' });
+  }
+
+  // Ejecutar la consulta
+  db.query(
+    'UPDATE Terminales SET Marca= ?, Procesador= ?, Imagen= ?, Precio= ?, descripcion= ? WHERE Modelo = ?',
+    [Marca, Procesador, Imagen, Precio, descripcion],
+    (err, results) => {
+      if (err) {
+        console.error('Error en la consulta:', err); // Log detallado del error en la consola
+        return res.status(500).json({ message: 'Error al modificar terminal' });
+      }
+
+      // Verificar si algún usuario fue afectado
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Terminal no encontrado' });
+      }
+
+      // Responder con éxito
+      res.status(200).json({ message: 'Terminal modificado correctamente' });
+    }
+  );
+});
+
+// Eliminar un terminal
+router.delete('/Modelo/:Modelo', (req, res) => {
+  const { modelo } = req.params;
+
+  db.query(
+    'DELETE FROM Terminales WHERE Modelo = ?',
+    [modelo],
+    (err, results) => {
+      if (err) {
+        console.error('Error en la consulta:', err); // Imprimir el error en consola
+        return res.status(500).json({ message: 'Error al eliminar terminal' });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Terminal no encontrado' });
+      }
+
+      res.status(200).json({ message: 'Terminal eliminado correctamente' });
+    }
+  );
+});
+
+module.exports = router;
