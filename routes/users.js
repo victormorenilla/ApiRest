@@ -90,8 +90,12 @@ router.put('/name/:name', (req, res) => {
 // Eliminar un usuario
 router.delete('/name/:name', (req, res) => {
   const { name } = req.params;
-  db.query('DELETE FROM users WHERE name = ?', [name], (err, results) => {
-    if (err) {
+
+  db.query(
+    'DELETE FROM users WHERE name = ?',
+    [name],
+    (err, results) => {
+      if (err) {
         console.error('Error en la consulta:', err); // Imprimir el error en consola
         return res.status(500).json({ message: 'Error al eliminar usuario' });
       }
@@ -102,7 +106,7 @@ router.delete('/name/:name', (req, res) => {
 
       res.status(200).json({ message: 'Usuario eliminado correctamente' });
     }
-  });
+  );
 });
 
 module.exports = router;
