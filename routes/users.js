@@ -92,12 +92,15 @@ router.delete('/name/:name', (req, res) => {
   const { name } = req.params;
   db.query('DELETE FROM users WHERE name = ?', [name], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Error al eliminar usuario' });
-    }
-    if (results.affectedRows > 0) {
-      res.status(204).send();
-    } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
+        console.error('Error en la consulta:', err); // Imprimir el error en consola
+        return res.status(500).json({ message: 'Error al eliminar usuario' });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      res.status(200).json({ message: 'Usuario eliminado correctamente' });
     }
   });
 });
