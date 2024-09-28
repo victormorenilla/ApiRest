@@ -62,7 +62,7 @@ router.post('/', (req, res) => {
 
 // Actualizar un terminal existente
 router.put('/Modelo/:Modelo', (req, res) => {
-  const { modelo } = req.params;
+  const { Modelo } = req.params;
   const { Marca, Procesador, Imagen, Precio, descripcion} = req.body;
  // Verificar que todos los campos estén presentes
   if (!Marca || !Procesador) {
@@ -72,7 +72,7 @@ router.put('/Modelo/:Modelo', (req, res) => {
   // Ejecutar la consulta
   db.query(
     'UPDATE Terminales SET Marca= ?, Procesador= ?, Imagen= ?, Precio= ?, descripcion= ? WHERE Modelo = ?',
-    [Marca, Procesador, Imagen, Precio, descripcion, modelo],
+    [Marca, Procesador, Imagen, Precio, descripcion, Modelo],
     (err, results) => {
       if (err) {
         console.error('Error en la consulta:', err); // Log detallado del error en la consola
@@ -92,11 +92,11 @@ router.put('/Modelo/:Modelo', (req, res) => {
 
 // Eliminar un terminal
 router.delete('/Modelo/:Modelo', (req, res) => {
-  const { modelo } = req.params;
+  const { Modelo } = req.params;
 
   db.query(
     'DELETE FROM Terminales WHERE Modelo = ?',
-    [modelo],
+    [Modelo],
     (err, results) => {
       if (err) {
         console.error('Error en la consulta:', err); // Imprimir el error en consola
