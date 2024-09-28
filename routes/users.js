@@ -58,15 +58,15 @@ router.post('/', (req, res) => {
 });
 
 // Actualizar un usuario existente
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const { name, email } = req.body;
-  db.query('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, id], (err, results) => {
+router.put('/:name', (req, res) => {
+  const { name } = req.params;
+  const { name, email, password } = req.body;
+  db.query('UPDATE users SET name = ?, email = ?, password = ? WHERE name = ?', [name, email, password], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al actualizar usuario' });
     }
     if (results.affectedRows > 0) {
-      res.json({ id, name, email });
+      res.json({ name, email, password});
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -74,9 +74,9 @@ router.put('/:id', (req, res) => {
 });
 
 // Eliminar un usuario
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  db.query('DELETE FROM users WHERE id = ?', [id], (err, results) => {
+router.delete('/:name', (req, res) => {
+  const { name } = req.params;
+  db.query('DELETE FROM users WHERE name = ?', [name], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al eliminar usuario' });
     }
