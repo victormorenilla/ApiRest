@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 });
 
 //Obtener terminales por marcas
-router.get('/:Marca/Marca', (req, res) => {
+router.get('/:Marca', (req, res) => {
   const { Marca } = req.params;
   db.query('SELECT * FROM Terminales WHERE Marca = ?', [Marca], (err, results) => {
     if (err) {
