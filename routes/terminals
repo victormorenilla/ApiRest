@@ -34,7 +34,7 @@ router.get('/:Precio', (req, res) => {
   const { Precio } = req.params;
   db.query('SELECT * FROM Terminales WHERE Precio <= ?', [Precio], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Error al consultarprecio' });
+      return res.status(500).json({ message: 'Error al consultar precio' });
     }
     if (results.length > 0) {
       res.json(results);
