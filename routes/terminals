@@ -33,13 +33,13 @@ router.get('/:Marca', (req, res) => {
 router.get('/Precio/:maxPrecio', (req, res) => {
   const { maxPrecio } = parseFloat(req.params.maxPrecio);
   db.query('SELECT * FROM Terminales WHERE Precio < ?', [maxPrecio], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al consultar precio' });
+    if (isNaN(maxPrecio)) {
+      return res.status(500).json({ message: 'Error al consultar precio campo númerico' });
     }
     if (results.length > 0) {
       res.json(results);
     } else {
-      res.status(404).json({ message: 'Precio no encontrado' });
+      res.status(404).json({ message: 'Rango de Precio muy bajo no encontrado' });
     }
   });
 });
