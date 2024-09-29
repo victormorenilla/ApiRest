@@ -49,8 +49,8 @@ router.post('/', (req, res) => {
   const { Marca, Modelo, Procesador, Imagen, Precio, descripcion } = req.body;
 
   // Validación básica de los campos
-  if (!Marca || !Modelo || !Procesador) {
-    return res.status(400).json({ message: 'Nombre, email y contraseña son requeridos.' });
+  if (!Marca || !Modelo || !Procesador||!Procesador || !Imagen || !Precio || !descripcion) {
+    return res.status(400).json({ message: 'Marca, modelo, procesador,imagen ,precio y descripción son requeridos.' });
   }
 
   // Consulta para insertar un nuevo usuario
