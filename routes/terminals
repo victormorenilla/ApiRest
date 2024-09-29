@@ -30,8 +30,8 @@ router.get('/:Marca', (req, res) => {
 });
 
 //Obtener terminales por precios
-router.get('/Precio/:Precio', (req, res) => {
-  const { Precio } = req.params.Precio;
+router.get('/:Precio', (req, res) => {
+  const { Precio } = req.params;
   db.query('SELECT * FROM Terminales WHERE Precio < ?', [Precio], (err, results) => {
     if (isNaN(maxPrecio)) {
       return res.status(500).json({ message: 'Error al consultar precio campo númerico' });
