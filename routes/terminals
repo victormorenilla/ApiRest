@@ -31,7 +31,7 @@ router.get('/:Marca', (req, res) => {
 
 //Obtener terminales por precios
 router.get('/Precio/:maxPrecio', (req, res) => {
-  const { maxPrecio } = req.params.maxPrecio;
+  const { maxPrecio } = parseFloat(req.params.maxPrecio);
   db.query('SELECT * FROM Terminales WHERE Precio < ?', [maxPrecio], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar precio' });
