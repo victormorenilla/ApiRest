@@ -2,7 +2,11 @@
 const express = require('express');
 const { Pool } = require('pg');  // Usamos Pool en lugar de Client para gestionar conexiones
 const app = express();
+const cors = require('cors');
 const port = process.env.PORT || 8080;
+
+// Habilitar CORS
+app.use(cors());
 
 // Configuración del pool de conexiones a la base de datos PostgreSQL (Neon)
 const pool = new Pool({
