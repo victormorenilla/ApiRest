@@ -19,12 +19,9 @@ app.use(express.json());
 
 // Importar las rutas
 const userRoutes = require('./routes/users');
-<<<<<<< HEAD
+
 const termRoutes = require('./routes/terminals');
 
-=======
-const termRoutes= require('./routes/terminals');
->>>>>>> aaf573794f644a8f6186d46474ce85e554563fe5
 // Usar las rutas
 app.use('/api/users', userRoutes);
 app.use('/api/terminals', termRoutes);

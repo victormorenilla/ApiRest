@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2');
-const connectionUrl = 'mysql://root:pjIJeIqjdTkiOTPhdeLJMdzdLTTfOctD@junction.proxy.rlwy.net:50532/railway';
-const db = mysql.createConnection(connectionUrl);
+const {Pool} = require('pg');
+
+// Configuración del pool de conexiones a la base de datos PostgreSQL (Neon)
+const pool = new Pool({
+  user: 'neondb_owner',
+  host: 'ep-red-thunder-a28kqfu5-pooler.eu-central-1.aws.neon.tech',
+  database: 'neondb',
+  password: 'npg_gbuyi2RmfzQ0',
+  port: 5432,
+  ssl: { rejectUnauthorized: false },
+});
 
 // Obtener todos los terminales
 router.get('/', (req, res) => {
-  db.query('SELECT * FROM Terminales', (err, results) => {
+  pool.query('SELECT * FROM Terminales', (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar usuarios' });
     }
@@ -17,7 +25,7 @@ router.get('/', (req, res) => {
 //Obtener terminales por marcas
 router.get('/:Marca', (req, res) => {
   const { Marca } = req.params;
-  db.query('SELECT * FROM Terminales WHERE Marca = ?', [Marca], (err, results) => {
+  pool.query('SELECT * FROM terminales WHERE Marca = ?', [Marca], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar marca' });
     }
@@ -32,7 +40,7 @@ router.get('/:Marca', (req, res) => {
 //Obtener terminales por precios
 router.get('/Precio/:Precio', (req, res) => {
   const { Precio } = req.params;
-  db.query('SELECT * FROM Terminales WHERE Precio < ?', [Precio], (err, results) => {
+  pool.query('SELECT * FROM terminales WHERE Precio < ?', [Precio], (err, results) => {
     if (isNaN(Precio)) {
       return res.status(500).json({ message: 'Error al consultar precio campo númerico' });
     }
@@ -47,7 +55,7 @@ router.get('/Precio/:Precio', (req, res) => {
 // Obtener un terminal por modelo
 router.get('/:Modelo', (req, res) => {
   const { Modelo } = req.params;
-  db.query('SELECT * FROM Terminales WHERE Modelo = ?', [Modelo], (err, results) => {
+  pool.query('SELECT * FROM terminales WHERE Modelo = ?', [Modelo], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error al consultar terminal' });
     }
@@ -71,7 +79,7 @@ router.post('/', (req, res) => {
   // Consulta para insertar un nuevo usuario
   const query = 'INSERT INTO Terminales (Marca, Modelo, Procesador, Imagen, Precio, descripcion) VALUES (?, ?, ?, ?, ?, ?)';
 
-  db.query(query, [Marca, Modelo, Procesador, Imagen, Precio, descripcion], (err, results) => {
+  pool.query(query, [Marca, Modelo, Procesador, Imagen, Precio, descripcion], (err, results) => {
     if (err) {
       console.error('Error al crear terminal:', err);
       return res.status(500).json({ message: 'Error al crear terminal', error: err });
@@ -100,7 +108,7 @@ router.put('/Modelo/:Modelo', (req, res) => {
   }
 
   // Ejecutar la consulta
-  db.query(
+  pool.query(
     'UPDATE Terminales SET Marca= ?, Procesador= ?, Imagen= ?, Precio= ?, descripcion= ? WHERE Modelo = ?',
     [Marca, Procesador, Imagen, Precio, descripcion, Modelo],
     (err, results) => {
@@ -124,7 +132,7 @@ router.put('/Modelo/:Modelo', (req, res) => {
 router.delete('/Modelo/:Modelo', (req, res) => {
   const { Modelo } = req.params;
 
-  db.query(
+  pool.query(
     'DELETE FROM Terminales WHERE Modelo = ?',
     [Modelo],
     (err, results) => {
