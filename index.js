@@ -1,40 +1,29 @@
 // index.js
 const express = require('express');
-const mysql = require('mysql2');
+const { Pool } = require('pg');  // Usamos Pool en lugar de Client para gestionar conexiones
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
-// Configuración de la conexión a la base de datos MySQL
-const connectionUrl = 'mysql://root:pjIJeIqjdTkiOTPhdeLJMdzdLTTfOctD@junction.proxy.rlwy.net:50532/railway';
-const db = mysql.createConnection(connectionUrl);
-// Probar la conexión a la base de datos
-db.connect((err) => {
-  if (err) {
-    console.error('Error conectando a la base de datos:', err);
-    return;
-  }
-  console.log('Conectado a la base de datos MySQL');
+// Configuración del pool de conexiones a la base de datos PostgreSQL (Neon)
+const pool = new Pool({
+  user: 'neondb_owner',         // Usuario proporcionado por Neon
+  host: 'ep-red-thunder-a28kqfu5-pooler.eu-central-1.aws.neon.tech',  // Host proporcionado por Neon
+  database: 'neondb',           // Nombre de tu base de datos en Neon
+  password: 'npg_gbuyi2RmfzQ0',  // Contraseña proporcionada por Neon
+  port: 5432,                   // Puerto por defecto de PostgreSQL
+  ssl: { rejectUnauthorized: false },  // Conexión segura SSL
 });
 
 // Middleware para manejar datos en formato JSON
 app.use(express.json());
 
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('API REST funcionando correctamente');
-});
+// Importar las rutas
+const userRoutes = require('./routes/users');
+const termRoutes = require('./routes/terminals');
 
-// Ruta para obtener todos los usuarios de la tabla "usuarios"
-app.get('/users', (req, res) => {
-  db.query('SELECT * FROM users', (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error al obtener los datos' });
-    } else {
-      res.json(results);
-    }
-  });
-});
+// Usar las rutas
+app.use('/api/users', userRoutes);
+app.use('/api/terminals', termRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {
