@@ -148,5 +148,28 @@ router.delete('/modelo/:Modelo', (req, res) => {
     res.status(200).json({ message: 'Terminal eliminado correctamente' });
   });
 });
-
+/// buscar 
+router.get('/buscar/:query', async (req, res) => {
+  try {
+    const { query } = req.params;
+    
+    const sql = `
+      SELECT * FROM Terminales 
+      WHERE Marca ILIKE $1 OR Modelo ILIKE $1 OR CAST(Precio AS TEXT) ILIKE $1
+    `;
+    
+    const values = [`%${query}%`]; // Agregar '%' para buscar cualquier coincidencia
+    
+    const results = await pool.query(sql, values);
+    
+    if (results.rows.length > 0) {
+      res.json(results.rows);
+    } else {
+      res.status(404).json({ message: 'No se encontraron terminales con ese criterio' });
+    }
+  } catch (err) {
+    console.error('Error en la búsqueda:', err);
+    res.status(500).json({ message: 'Error al buscar terminales' });
+  }
+});
 module.exports = router;
