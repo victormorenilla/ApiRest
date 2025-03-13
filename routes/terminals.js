@@ -164,13 +164,13 @@ router.get('/buscar/:query', async (req, res) => {
     if (!isNaN(query)) {
       // Si query es un número, filtra por un rango de precios ±100
       sql = `SELECT * FROM Terminales WHERE Precio BETWEEN $1 AND $2`;
-      values = [Number(query) - 100, Number(query) + 100];
+      values = [Number(query) - 200, Number(query) + 200];
     } else {
       // Si query es un texto, buscar por marca o modelo
       sql = `SELECT * FROM Terminales WHERE Marca ILIKE $1 OR Modelo ILIKE $1`;
       values = [`%${query}%`];
     }
-    
+
     const results = await pool.query(sql, values);
     
     if (results.rows.length > 0) {
