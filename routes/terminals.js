@@ -153,12 +153,23 @@ router.get('/buscar/:query', async (req, res) => {
   try {
     const { query } = req.params;
     
-    const sql = `
+    /*const sql = `
       SELECT * FROM Terminales 
       WHERE Marca ILIKE $1 OR Modelo ILIKE $1 OR CAST(Precio AS TEXT) ILIKE $1
     `;
     
-    const values = [`%${query}%`]; // Agregar '%' para buscar cualquier coincidencia
+    const values = [`%${query}%`]; // Agregar '%' para buscar cualquier coincidencia*/
+    let sql, values;
+    
+    if (!isNaN(query)) {
+      // Si query es un número, filtra por un rango de precios ±100
+      sql = `SELECT * FROM Terminales WHERE Precio BETWEEN $1 AND $2`;
+      values = [Number(query) - 100, Number(query) + 100];
+    } else {
+      // Si query es un texto, buscar por marca o modelo
+      sql = `SELECT * FROM Terminales WHERE Marca ILIKE $1 OR Modelo ILIKE $1`;
+      values = [`%${query}%`];
+    }
     
     const results = await pool.query(sql, values);
     
