@@ -152,13 +152,6 @@ router.delete('/modelo/:Modelo', (req, res) => {
 router.get('/buscar/:query', async (req, res) => {
   try {
     const { query } = req.params;
-    
-    /*const sql = `
-      SELECT * FROM Terminales 
-      WHERE Marca ILIKE $1 OR Modelo ILIKE $1 OR CAST(Precio AS TEXT) ILIKE $1
-    `;
-    
-    const values = [`%${query}%`]; // Agregar '%' para buscar cualquier coincidencia*/
     let sql, values;
     
     if (!isNaN(query)) {
