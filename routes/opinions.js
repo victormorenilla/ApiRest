@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
   }
   query += ' ORDER BY created_at DESC';
 
-  pool.query('SELECT * FROM opiniones ORDER BY created_at DESC', (err, results) => {
+pool.query(query, params, (err, results) => {
     if (err) {
       console.error('Error al obtener opiniones:', err);
       return res.status(500).json({ message: 'Error al obtener opiniones' });
