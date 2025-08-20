@@ -12,16 +12,16 @@ const pool = new Pool({
 router.get('/', (req, res) => {
   const { idTerminal } = req.query; // viene como string
 
-  let query = 'SELECT * FROM opinions';
+  let query = 'SELECT * FROM opiniones';
   const params = [];
 
   if (idTerminal) {
-    query += ' WHERE id_terminal = $1';
+    query += ' WHERE idTerminal = $1';
     params.push(idTerminal);
   }
   query += ' ORDER BY created_at DESC';
-  
-  pool.query('SELECT * FROM opinions ORDER BY created_at DESC', (err, results) => {
+
+  pool.query('SELECT * FROM opiniones ORDER BY created_at DESC', (err, results) => {
     if (err) {
       console.error('Error al obtener opiniones:', err);
       return res.status(500).json({ message: 'Error al obtener opiniones' });
@@ -32,14 +32,14 @@ router.get('/', (req, res) => {
 
 // Crear una opinión
 router.post('/', (req, res) => {
-  const { user_id, opinion } = req.body;
+  const { idUser, opinion } = req.body;
 
-  if (!user_id || !opinion) {
-    return res.status(400).json({ message: 'user_id y opinion son requeridos' });
+  if (!idUser || !opinion) {
+    return res.status(400).json({ message: 'idUser y opinion son requeridos' });
   }
 
-  const query = 'INSERT INTO opinions (user_id, opinion) VALUES ($1, $2) RETURNING *';
-  pool.query(query, [user_id, opinion], (err, results) => {
+  const query = 'INSERT INTO opiniones (idUser, opinion) VALUES ($1, $2) RETURNING *';
+  pool.query(query, [idUser, opinion], (err, results) => {
     if (err) {
       console.error('Error al crear opinión:', err);
       return res.status(500).json({ message: 'Error al crear opinión' });
@@ -52,7 +52,7 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
 
-  pool.query('DELETE FROM opinions WHERE id = $1', [id], (err, results) => {
+  pool.query('DELETE FROM opiniones WHERE id = $1', [id], (err, results) => {
     if (err) {
       console.error('Error al eliminar opinión:', err);
       return res.status(500).json({ message: 'Error al eliminar opinión' });
@@ -74,7 +74,7 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ message: 'El campo opinion es requerido para actualizar' });
   }
 
-  const query = 'UPDATE opinions SET opinion = $1 WHERE id = $2 RETURNING *';
+  const query = 'UPDATE opiniones SET opinion = $1 WHERE id = $2 RETURNING *';
   pool.query(query, [opinion, id], (err, results) => {
     if (err) {
       console.error('Error al modificar opinión:', err);
