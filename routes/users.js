@@ -5,11 +5,11 @@ const router = express.Router();
 
 // Configuración del pool de conexiones a la base de datos PostgreSQL (Neon)
 const pool = new Pool({
-  user: 'neondb_owner',
-  host: 'ep-red-thunder-a28kqfu5-pooler.eu-central-1.aws.neon.tech',
-  database: 'neondb',
-  password: 'npg_gbuyi2RmfzQ0',
-  port: 5432,
+  user: process.env.DB_USER ,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
   ssl: { rejectUnauthorized: false },
 });
 

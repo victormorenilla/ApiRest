@@ -1,13 +1,14 @@
 const express = require('express');
 const { Pool } = require('pg');  // Usamos Pool en lugar de Client para gestionar conexiones
+require('dotenv').config(); // Cargar variables de entorno desde .env 
 const router = express.Router();
 
 const pool = new Pool({
-  user: 'neondb_owner',
-  host: 'ep-red-thunder-a28kqfu5-pooler.eu-central-1.aws.neon.tech',
-  database: 'neondb',
-  password: 'npg_gbuyi2RmfzQ0',
-  port: 5432,
+  user: process.env.DB_USER ,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
   ssl: { rejectUnauthorized: false },
 });
 
