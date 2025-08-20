@@ -10,7 +10,7 @@ const pool = new Pool({
 
 // Obtener todas las opiniones
 router.get('/', (req, res) => {
-  const { idTerminal } = req.query; // viene como string
+  const idTerminal = req.query.idTerminal ? parseInt(req.query.idTerminal) : null;
 
   let query = 'SELECT * FROM opiniones';
   const params = [];
@@ -19,9 +19,10 @@ router.get('/', (req, res) => {
     query += ' WHERE idTerminal = $1';
     params.push(idTerminal);
   }
+
   query += ' ORDER BY created_at DESC';
 
-pool.query(query, params, (err, results) => {
+  pool.query(query, params, (err, results) => {
     if (err) {
       console.error('Error al obtener opiniones:', err);
       return res.status(500).json({ message: 'Error al obtener opiniones' });
