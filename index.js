@@ -10,12 +10,8 @@ app.use(cors());
 
 // Configuración del pool de conexiones a la base de datos PostgreSQL (Neon)
 const pool = new Pool({
-  user: 'neondb_owner',         // Usuario proporcionado por Neon
-  host: 'ep-red-thunder-a28kqfu5-pooler.eu-central-1.aws.neon.tech',  // Host proporcionado por Neon
-  database: 'neondb',           // Nombre de tu base de datos en Neon
-  password: 'npg_gbuyi2RmfzQ0',  // Contraseña proporcionada por Neon
-  port: 5432,                   // Puerto por defecto de PostgreSQL
-  ssl: { rejectUnauthorized: false },  // Conexión segura SSL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 // Middleware para manejar datos en formato JSON
@@ -26,9 +22,12 @@ const userRoutes = require('./routes/users');
 
 const termRoutes = require('./routes/terminals');
 
+const opinionRoutes = require('./routes/opinions');
+
 // Usar las rutas
 app.use('/api/users', userRoutes);
 app.use('/api/terminals', termRoutes);
+app.use('/api/opinions', opinionRoutes);
 
 // Iniciar el servidor
 app.listen(port, () => {
