@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
     params.push(idTerminal);
   }
 
-  query += ' ORDER BY created_at DESC';
+  query += ' ORDER BY id DESC';
 
   pool.query(query, params, (err, results) => {
     if (err) {
