@@ -33,9 +33,9 @@ router.get('/', (req, res) => {
 
 // Crear una opinión
 router.post('/', (req, res) => {
-  const { idUser, opinion } = req.body;
+  const { idUser,idTerminal, opinion } = req.body;
 
-  if (!idUser || !opinion) {
+  if (!idUser || !idTerminal || !opinion) {
     return res.status(400).json({ message: 'idUser y opinion son requeridos' });
   }
 
