@@ -33,17 +33,27 @@ router.get('/', (req, res) => {
 
 // Crear una opinión
 router.post('/', (req, res) => {
-  const { idUser,idTerminal, opinion } = req.body;
+  let { idUser, idTerminal, opinion } = req.body;
 
-  if (!idUser || !idTerminal || !opinion) {
-    return res.status(400).json({ message: 'idUser y opinion son requeridos' });
+  if (idUser === undefined || idTerminal === undefined || !opinion) {
+    return res.status(400).json({ message: 'idUser, idTerminal y opinion son requeridos' });
   }
 
-  const query = 'INSERT INTO opiniones (idUser, opinion) VALUES ($1, $2) RETURNING *';
-  pool.query(query, [idUser, opinion], (err, results) => {
+  idUser = parseInt(idUser);
+  idTerminal = parseInt(idTerminal);
+
+  if (isNaN(idUser) || isNaN(idTerminal)) {
+    return res.status(400).json({ message: 'idUser y idTerminal deben ser números enteros' });
+  }
+
+  const query = 'INSERT INTO opiniones (idUser, idTerminal, opinion) VALUES ($1, $2, $3) RETURNING *';
+  pool.query(query, [idUser, idTerminal, opinion], (err, results) => {
     if (err) {
-      console.error('Error al crear opinión:', err);
-      return res.status(500).json({ message: 'Error al crear opinión' });
+      console.error('Error al crear opinión:', err); // ya lo tienes
+      return res.status(500).json({ 
+        message: 'Error al crear opinión',
+        error: err.message // <-- agrega esto para ver el detalle
+      });
     }
     res.status(201).json(results.rows[0]);
   });
