@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
     return res.status(400).json({ message: 'idUser y idTerminal deben ser números enteros' });
   }
 
-  const query = 'INSERT INTO opiniones (idUser, idTerminal, opinion) VALUES ($1, $2, $3) RETURNING *';
+  const query = 'INSERT INTO opiniones ("idUser"," idTerminal", opinion) VALUES ($1, $2, $3) RETURNING *';
   pool.query(query, [idUser, idTerminal, opinion], (err, results) => {
     if (err) {
       console.error('Error al crear opinión:', err); // ya lo tienes
